@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
+import { userRoutes } from "./routes/userRoutes.js";
 
 const app = express();
 
@@ -23,6 +24,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(fileUpload());
+
+app.get("/", (req, res) => {
+  res.send("Welcome to chat app");
+});
+
+app.use("/api/v1/user", userRoutes);
 
 app.use(errorMiddleware);
 
