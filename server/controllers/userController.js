@@ -53,7 +53,8 @@ export const verifyOtp = catchAsyncErrors(async (req, res, next) => {
   user = await User.findOne({ email }).select("name email activated avatar");
 
   if (!user) {
-    user = await User.create({ email }).select("name email activated avatar");
+    user = await User.create({ email });
+    user = await User.findById(user._id).select("name email activated avatar");
   }
 
   const token = user.getJWT();
