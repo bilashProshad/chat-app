@@ -3,6 +3,7 @@ import { User } from "../models/User.js";
 import { ErrorHandler } from "../utils/ErrorHandler.js";
 import { generateOtp, hashOtp, validateOtp } from "../utils/otp.js";
 import { sendEmail } from "../utils/sendEmail.js";
+import cloudinary from "cloudinary";
 
 export const sendOtp = catchAsyncErrors(async (req, res, next) => {
   const { email } = req.body;
@@ -19,13 +20,13 @@ export const sendOtp = catchAsyncErrors(async (req, res, next) => {
   const data = `${email}#${otp}#${expires}`;
   const hash = hashOtp(data);
 
-  await sendEmail({
-    email,
-    subject: "Chat App OTP",
-    message: `Your chat-app OTP is ${otp}`,
-  });
+  // await sendEmail({
+  //   email,
+  //   subject: "Chat App OTP",
+  //   message: `Your chat-app OTP is ${otp}`,
+  // });
 
-  res.status(200).json({ hash: `${hash}.${expires}`, email });
+  res.status(200).json({ hash: `${hash}.${expires}`, email, otp });
 });
 
 export const verifyOtp = catchAsyncErrors(async (req, res, next) => {
@@ -69,6 +70,35 @@ export const verifyOtp = catchAsyncErrors(async (req, res, next) => {
   res.cookie("token", token, options).json({ success: true, user, auth: true });
 });
 
-export const activate = catchAsyncErrors(async (req, res, next) => {});
+export const activate = catchAsyncErrors(async (req, res, next) => {
+  const { name, avatar } = req.body;
+
+  if (!name) {
+    return next(new ErrorHandler(400, "Name field is required!"));
+  }
+
+  let user = await User.findById(req.user._id).select(
+    "name email activated avatar"
+  );
+  user.name = name;
+  user.activated = true;
+
+  if (avatar) {
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "chat-app/profile-picture",
+      width: 250,
+      crop: "scale",
+    });
+
+    user.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+  }
+
+  await user.save();
+
+  res.status(200).json({ success: true, user, auth: true });
+});
 
 export const logout = catchAsyncErrors(async (req, res, next) => {});
