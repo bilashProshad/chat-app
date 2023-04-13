@@ -101,4 +101,7 @@ export const activate = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({ success: true, user, auth: true });
 });
 
-export const logout = catchAsyncErrors(async (req, res, next) => {});
+export const logout = catchAsyncErrors(async (req, res, next) => {
+  res.clearCookie("token");
+  res.status(200).json({ success: true, user: null, auth: false });
+});
