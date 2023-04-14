@@ -8,6 +8,7 @@ import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import { userRoutes } from "./routes/userRoutes.js";
 import cloudinary from "cloudinary";
 import { chatRoutes } from "./routes/chatRoutes.js";
+import { messageRoutes } from "./routes/messageRoutes.js";
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/chat", chatRoutes);
+app.use("/api/v1/message", messageRoutes);
 
 app.use(errorMiddleware);
 
