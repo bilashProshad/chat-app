@@ -14,7 +14,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ["Nunito", "sans-serif"].join(","),
+    fontFamily: ["Roboto", "sans-serif"].join(","),
   },
 });
 

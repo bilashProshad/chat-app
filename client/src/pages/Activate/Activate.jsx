@@ -1,9 +1,11 @@
 import { useState } from "react";
 import LayoutBasic from "../../components/LayoutBasic";
+import StepName from "../steps/StepName";
+import StepAvatar from "../steps/StepAvatar";
 
 const steps = {
-  // 1: StepEmail,
-  // 2: StepOTP,
+  1: StepName,
+  2: StepAvatar,
 };
 
 const Activate = () => {
@@ -16,7 +18,13 @@ const Activate = () => {
     }
   };
 
-  return <div>Activate</div>;
+  return (
+    <>
+      <LayoutBasic>
+        <Step onNext={nextHandler} />
+      </LayoutBasic>
+    </>
+  );
 };
 
 export default Activate;

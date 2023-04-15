@@ -1,20 +1,15 @@
 import { Box, Button, CardContent, TextField, Typography } from "@mui/material";
 import Card from "@mui/material/Card";
-import photo2 from "../../assets/photo2.svg";
+import photo1 from "../../assets/photo1.svg";
 import { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import EditIcon from "@mui/icons-material/Edit";
-import { useNavigate } from "react-router-dom";
 
-const StepOTP = ({ onNext }) => {
-  const [otp, setOTP] = useState("");
-
-  const navigate = useNavigate();
+const StepName = ({ onNext }) => {
+  const [name, setName] = useState("");
 
   const submitHandler = (e) => {
     e.preventDefault();
 
-    navigate("/activate");
     onNext();
   };
 
@@ -37,7 +32,7 @@ const StepOTP = ({ onNext }) => {
             alignItems: "center",
           }}
         >
-          <img src={photo2} alt="photo 2" style={{ width: "100%" }} />
+          <img src={photo1} alt="photo 1" style={{ width: "100%" }} />
         </Box>
         <Box width={"28rem"}>
           <Box sx={{ mb: 4 }}>
@@ -47,34 +42,19 @@ const StepOTP = ({ onNext }) => {
               component={"h1"}
               sx={{ mb: 1, fontWeight: "bold" }}
             >
-              Verify Email
+              What's your full name
             </Typography>
             <Typography textAlign={"center"}>
-              Enter the code we just sent you to
-            </Typography>
-            <Typography
-              textAlign={"center"}
-              variant="subtitle2"
-              fontWeight={"bold"}
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "5px",
-                cursor: "pointer",
-              }}
-            >
-              pbilash64@gmail.com{" "}
-              <EditIcon color="primary" sx={{ fontSize: "16px" }} />
+              People use real name in our app
             </Typography>
           </Box>
           <Box component={"form"} onSubmit={submitHandler}>
             <TextField
-              value={otp}
-              onChange={(e) => setOTP(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               id="outlined-basic"
-              label="OTP"
-              type="number"
+              label="Name"
+              type="text"
               variant="outlined"
               sx={{
                 width: "100%",
@@ -82,8 +62,8 @@ const StepOTP = ({ onNext }) => {
                   height: "0.4rem",
                 },
                 "& .MuiFormLabel-root": {
-                  fontSize: otp ? "1rem" : "12px",
-                  top: otp ? "0" : "-13%",
+                  fontSize: name ? "1rem" : "12px",
+                  top: name ? "0" : "-13%",
                 },
                 "& .MuiFormLabel-root.Mui-focused": {
                   fontSize: "1rem",
@@ -94,10 +74,7 @@ const StepOTP = ({ onNext }) => {
             <Button
               variant="contained"
               type="submit"
-              sx={{
-                width: "100%",
-                mt: 2,
-              }}
+              sx={{ width: "100%", mt: 2 }}
             >
               Next <ArrowForwardIcon fontSize={"small"} />
             </Button>
@@ -108,4 +85,4 @@ const StepOTP = ({ onNext }) => {
   );
 };
 
-export default StepOTP;
+export default StepName;
