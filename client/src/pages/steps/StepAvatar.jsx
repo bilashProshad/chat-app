@@ -12,7 +12,21 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import profile from "../../assets/profile.png";
 
 const StepAvatar = () => {
-  const [image, setImage] = useState(profile);
+  const [image, setImage] = useState("");
+  const [imagePreview, setImagePreview] = useState(profile);
+
+  const setProfileImage = (e) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setImagePreview(reader.result);
+        setImage(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -79,7 +93,7 @@ const StepAvatar = () => {
                 }}
               >
                 <img
-                  src={image}
+                  src={imagePreview}
                   alt="profile"
                   style={{
                     width: "100%",
@@ -88,7 +102,12 @@ const StepAvatar = () => {
                   }}
                 />
               </InputLabel>
-              <input type="file" id="avatar" style={{ display: "none" }} />
+              <input
+                type="file"
+                id="avatar"
+                style={{ display: "none" }}
+                onChange={setProfileImage}
+              />
             </Box>
             <Button
               variant="contained"
