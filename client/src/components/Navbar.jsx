@@ -1,4 +1,11 @@
-import { AppBar, Badge, Box, IconButton, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Badge,
+  Box,
+  Container,
+  IconButton,
+  Toolbar,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -10,12 +17,13 @@ const Navbar = () => {
   const matches = useMediaQuery((theme) => theme.breakpoints.up("sm"));
 
   return (
-    <Box>
+    <Box sx={{ borderBottom: "1px solid #ddd" }}>
       <AppBar
         position="static"
         color="default"
-        sx={{ backgroundColor: "#fff" }}
+        sx={{ backgroundColor: "#fff", boxShadow: "none" }}
       >
+        {/* <Container maxWidth={"xl"}> */}
         <Toolbar>
           <Link to={"/messages"} style={{ marginRight: "auto" }}>
             <img
@@ -41,6 +49,7 @@ const Navbar = () => {
             <ProfileMenu />
           </Box>
         </Toolbar>
+        {/* </Container> */}
       </AppBar>
     </Box>
   );
