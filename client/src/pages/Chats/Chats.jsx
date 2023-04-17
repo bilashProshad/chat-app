@@ -1,15 +1,9 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import Layout from "../../components/Layout";
 import Chat from "../../components/Chat";
 import InfoIcon from "@mui/icons-material/Info";
 import ChatInput from "../../components/ChatInput/ChatInput";
+import Message from "../../components/Message";
 
 const Chats = () => {
   return (
@@ -18,8 +12,8 @@ const Chats = () => {
         {/* <Container maxWidth={"xl"}> */}
         <Box
           display={"flex"}
-          height={"calc(100svh - 4.2rem)"}
-          overflow={"hidden"}
+          height={"calc(100svh - 4.3rem)"}
+          // overflow={"hidden"}
         >
           <Box
             width={"300px"}
@@ -46,12 +40,9 @@ const Chats = () => {
           >
             <Chat />
             <Chat />
-            <Chat />
-            <Chat />
-            <Chat />
           </Box>
           {/* ------- right ------- */}
-          <Box flex={1} borderRight={"1px solid #eee"} position={"relative"}>
+          <Box flex={1} borderRight={"1px solid #eee"} height={"100%"}>
             <Box
               padding={2}
               sx={{ borderBottom: "1px solid #eee" }}
@@ -74,18 +65,41 @@ const Chats = () => {
               </Box>
             </Box>
 
-            <Box height={"100%"}>flkasdjflkdasfj</Box>
             <Box
-              position={"sticky"}
-              bottom={0}
-              left={0}
-              right={0}
+              height={"90%"}
               display={"flex"}
-              justifyContent={"center"}
+              flexDirection={"column"}
+              justifyContent={"space-between"}
               alignItems={"center"}
-              padding={2}
+              // sx={{ backgroundColor: "#eee" }}
             >
-              <ChatInput />
+              {/* =========== Conversation ============= */}
+              <Box
+                sx={{ width: "100%" }}
+                padding={3}
+                // display={"flex"}
+                // flexDirection={"column"}
+                overflow={"auto"}
+              >
+                <Box
+                  display={"flex"}
+                  flexDirection={"column"}
+                  maxWidth={"60rem"}
+                  marginLeft={"auto"}
+                  marginRight={"auto"}
+                  gap={1}
+                >
+                  <Message />
+                  <Message self={true} />
+                </Box>
+              </Box>
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                sx={{ width: "100%" }}
+              >
+                <ChatInput />
+              </Box>
             </Box>
           </Box>
         </Box>

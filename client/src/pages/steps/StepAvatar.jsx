@@ -10,10 +10,13 @@ import photo1 from "../../assets/photo1.svg";
 import { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import profile from "../../assets/profile.png";
+import { useNavigate } from "react-router-dom";
 
 const StepAvatar = () => {
   const [image, setImage] = useState("");
   const [imagePreview, setImagePreview] = useState(profile);
+
+  const navigate = useNavigate();
 
   const setProfileImage = (e) => {
     const reader = new FileReader();
@@ -31,7 +34,7 @@ const StepAvatar = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    onNext();
+    navigate("/messages");
   };
 
   return (
