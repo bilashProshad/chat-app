@@ -18,10 +18,16 @@ const Authenticate = () => {
     }
   };
 
+  const prevHandler = () => {
+    if (step > 1) {
+      setStep((prevStep) => prevStep - 1);
+    }
+  };
+
   return (
     <>
       <LayoutBasic>
-        <Step onNext={nextHandler} />
+        <Step onNext={nextHandler} onPrev={prevHandler} />
       </LayoutBasic>
     </>
   );

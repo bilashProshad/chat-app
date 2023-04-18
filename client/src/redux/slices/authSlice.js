@@ -23,23 +23,31 @@ const authSlice = createSlice({
       state.loading = false;
       state.otp.email = action.payload.email;
       state.otp.hash = action.payload.hash;
+      state.success = true;
     },
     getOtpFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
     // ---------------------------
-    userAuthRequest: (state) => {
+    verifyOtpRequest: (state) => {
       state.loading = true;
     },
-    userAuthSuccess: (state, action) => {
+    verifyOtpSuccess: (state, action) => {
       state.loading = false;
+      state.user = action.payload.user;
+      state.success = action.payload.success;
+      state.isAuth = action.payload.auth;
     },
-    userAuthFail: (state, action) => {
+    verifyOtpFail: (state, action) => {
       state.loading = false;
+      state.error = action.payload;
     },
     clearError: (state) => {
       state.error = null;
+    },
+    clearAuthSuccess: (state) => {
+      state.success = false;
     },
   },
 });
@@ -48,9 +56,11 @@ export const {
   getOtpRequest,
   getOtpSuccess,
   getOtpFail,
-  userAuthFail,
-  userAuthRequest,
-  userAuthSuccess,
+  verifyOtpRequest,
+  verifyOtpSuccess,
+  verifyOtpFail,
+  clearError,
+  clearAuthSuccess,
 } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

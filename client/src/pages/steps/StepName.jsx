@@ -14,7 +14,7 @@ const StepName = ({ onNext }) => {
   };
 
   return (
-    <Card>
+    <Card sx={{ mt: "7rem" }}>
       <CardContent
         sx={{
           display: "flex",
