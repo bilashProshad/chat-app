@@ -1,5 +1,4 @@
 import { Avatar, Box, Typography } from "@mui/material";
-import React from "react";
 
 const Message = ({ self = false }) => {
   return (
@@ -13,10 +12,11 @@ const Message = ({ self = false }) => {
         >
           <Typography
             sx={{ backgroundColor: "#1E71FF", color: "#fff" }}
-            padding={0.5}
+            padding={1}
             paddingLeft={2}
-            paddingRight={1}
-            minWidth={"10rem"}
+            paddingRight={2}
+            // minWidth={"10rem"}
+
             borderRadius={"10px 0px 10px 10px"}
           >
             Hello
@@ -28,10 +28,10 @@ const Message = ({ self = false }) => {
           <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
           <Typography
             sx={{ backgroundColor: "#e4e6eb", color: "#333" }}
-            padding={0.5}
+            padding={1}
             paddingLeft={2}
-            paddingRight={1}
-            minWidth={"10rem"}
+            paddingRight={2}
+            // minWidth={"10rem"}
             borderRadius={"0 10px 10px 10px"}
           >
             Hello

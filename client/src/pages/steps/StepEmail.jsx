@@ -3,14 +3,24 @@ import Card from "@mui/material/Card";
 import photo1 from "../../assets/photo1.svg";
 import { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useDispatch } from "react-redux";
+import { getOtp } from "../../redux/actions/authAction";
 
 const StepEmail = ({ onNext }) => {
   const [email, setEmail] = useState("");
 
+  const dispatch = useDispatch();
+
   const submitHandler = (e) => {
     e.preventDefault();
 
-    onNext();
+    if (!email) {
+      return;
+    }
+
+    dispatch(getOtp(email));
+
+    // onNext();
   };
 
   return (
