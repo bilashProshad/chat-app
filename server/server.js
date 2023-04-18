@@ -9,6 +9,7 @@ import { userRoutes } from "./routes/userRoutes.js";
 import cloudinary from "cloudinary";
 import { chatRoutes } from "./routes/chatRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
+import cors from "cors";
 
 const app = express();
 
@@ -23,6 +24,11 @@ process.on("uncaughtException", (err) => {
 
 connectDatabase();
 
+const corsOption = {
+  credentials: true,
+  origin: [process.env.FRONT_END_URL],
+};
+app.use(cors(corsOption));
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
