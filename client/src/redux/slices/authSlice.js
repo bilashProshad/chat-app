@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   success: false,
   error: null,
+  message: null,
 };
 
 const authSlice = createSlice({
@@ -73,12 +74,25 @@ const authSlice = createSlice({
       state.loading = false;
       // state.error = action.payload;
     },
+    logoutSuccess: (state, action) => {
+      state.loading = false;
+      state.user = action.payload.user;
+      state.isAuth = action.payload.auth;
+      state.message = action.payload.message;
+    },
+    logoutFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     // ------------------------------------
     clearError: (state) => {
       state.error = null;
     },
     clearAuthSuccess: (state) => {
       state.success = false;
+    },
+    clearMessage: (state) => {
+      state.message = null;
     },
   },
 });
@@ -96,8 +110,11 @@ export const {
   loadUserRequest,
   loadUserSuccess,
   loadUserFail,
+  logoutSuccess,
+  logoutFail,
   clearError,
   clearAuthSuccess,
+  clearMessage,
 } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

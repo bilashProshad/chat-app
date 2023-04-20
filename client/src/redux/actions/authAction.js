@@ -9,6 +9,8 @@ import {
   loadUserFail,
   loadUserRequest,
   loadUserSuccess,
+  logoutFail,
+  logoutSuccess,
   verifyOtpFail,
   verifyOtpRequest,
   verifyOtpSuccess,
@@ -70,5 +72,15 @@ export const loadUser = () => async (dispatch) => {
     dispatch(loadUserSuccess(data));
   } catch (error) {
     dispatch(loadUserFail(error.response.data.message));
+  }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    const { data } = await api.get(`/api/v1/user/logout`);
+
+    dispatch(logoutSuccess(data));
+  } catch (error) {
+    dispatch(logoutFail(error.response.data.message));
   }
 };

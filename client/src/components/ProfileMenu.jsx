@@ -6,21 +6,57 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/actions/authAction";
+import toast from "react-hot-toast";
+import {
+  clearAuthSuccess,
+  clearError,
+  clearMessage,
+} from "../redux/slices/authSlice";
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const { user, error, message, success } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    setAnchorEl(null);
+  };
+
+  React.useEffect(() => {
+    if (message) {
+      toast.success(message);
+      dispatch(clearMessage());
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+
+    if (success) {
+      dispatch(clearAuthSuccess());
+      navigate("/");
+    }
+  }, [message, success, error, dispatch, navigate]);
+
   return (
     <React.Fragment>
       <Box
@@ -38,7 +74,13 @@ export default function ProfileMenu() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar
+              src={user?.avatar?.url}
+              alt={user?.name}
+              sx={{ width: 32, height: 32 }}
+            >
+              alt={user?.name}
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -78,10 +120,10 @@ export default function ProfileMenu() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleClose} sx={{ width: "150px" }}>
-          <Avatar /> Profile
+          <Avatar src={user?.avatar?.url} alt={user?.name} /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logoutHandler}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
