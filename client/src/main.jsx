@@ -12,8 +12,8 @@ const theme = createTheme({
       main: "#1E71FF",
     },
     bg: {
-      // main: "#EDF0F9",
-      main: "#fff",
+      main: "#EDF0F9",
+      // main: "#fff",
     },
   },
   typography: {
@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <ThemeProvider theme={theme}>
         <GlobalStyles
           styles={{
-            body: { backgroundColor: "#fff" },
+            body: { backgroundColor: "#EDF0F9" },
           }}
         />
         <App />
