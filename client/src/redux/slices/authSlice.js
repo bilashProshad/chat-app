@@ -38,11 +38,28 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.success = action.payload.success;
       state.isAuth = action.payload.auth;
+      state.otp.email = "";
+      state.otp.hash = "";
     },
     verifyOtpFail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
+    // ------------------------------
+    activateUserRequest: (state) => {
+      state.loading = true;
+    },
+    activateUserSuccess: (state, action) => {
+      state.loading = false;
+      state.user = action.payload.user;
+      state.isAuth = action.payload.auth;
+      state.success = action.payload.success;
+    },
+    activateUserFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // ---------------------------------
     clearError: (state) => {
       state.error = null;
     },
@@ -59,6 +76,9 @@ export const {
   verifyOtpRequest,
   verifyOtpSuccess,
   verifyOtpFail,
+  activateUserRequest,
+  activateUserSuccess,
+  activateUserFail,
   clearError,
   clearAuthSuccess,
 } = authSlice.actions;

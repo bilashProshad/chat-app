@@ -1,5 +1,8 @@
 import api from "../../http";
 import {
+  activateUserFail,
+  activateUserRequest,
+  activateUserSuccess,
   getOtpFail,
   getOtpRequest,
   getOtpSuccess,
@@ -37,3 +40,20 @@ export const verifyOtp =
       dispatch(verifyOtpFail(error.response.data.message));
     }
   };
+
+export const activateUser = (userData) => async (dispatch) => {
+  try {
+    dispatch(activateUserRequest());
+
+    const config = {
+      headers: { "Content-Type": "multipart/form-data" },
+      withCredentials: true,
+    };
+
+    const { data } = await api.post(`/api/v1/user/activate`, userData, config);
+
+    dispatch(activateUserSuccess(data));
+  } catch (error) {
+    dispatch(activateUserFail(error.response.data.message));
+  }
+};

@@ -3,12 +3,20 @@ import Card from "@mui/material/Card";
 import photo1 from "../../assets/photo1.svg";
 import { useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useDispatch } from "react-redux";
+import { setUsername } from "../../redux/slices/userInfoSlice";
 
 const StepName = ({ onNext }) => {
   const [name, setName] = useState("");
 
+  const dispatch = useDispatch();
+
   const submitHandler = (e) => {
     e.preventDefault();
+
+    if (!name) return;
+
+    dispatch(setUsername(name));
 
     onNext();
   };
