@@ -44,7 +44,7 @@ const StepOTP = ({ onPrev }) => {
       dispatch(clearAuthSuccess());
       navigate("/activate");
     }
-  }, [error, success]);
+  }, [error, success, dispatch, navigate]);
 
   return (
     <>
