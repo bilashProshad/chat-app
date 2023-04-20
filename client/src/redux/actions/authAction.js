@@ -6,6 +6,9 @@ import {
   getOtpFail,
   getOtpRequest,
   getOtpSuccess,
+  loadUserFail,
+  loadUserRequest,
+  loadUserSuccess,
   verifyOtpFail,
   verifyOtpRequest,
   verifyOtpSuccess,
@@ -55,5 +58,17 @@ export const activateUser = (userData) => async (dispatch) => {
     dispatch(activateUserSuccess(data));
   } catch (error) {
     dispatch(activateUserFail(error.response.data.message));
+  }
+};
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch(loadUserRequest());
+
+    const { data } = await api.get(`/api/v1/user/me`);
+
+    dispatch(loadUserSuccess(data));
+  } catch (error) {
+    dispatch(loadUserFail(error.response.data.message));
   }
 };

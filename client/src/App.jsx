@@ -6,8 +6,15 @@ import { Toaster } from "react-hot-toast";
 import PublicRoute from "./components/Route/PublicRoute";
 import SemiProtectedRoute from "./components/Route/SemiProtectedRoute";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
+import store from "./redux/store";
+import { useEffect } from "react";
+import { loadUser } from "./redux/actions/authAction";
 
 function App() {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

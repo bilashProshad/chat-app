@@ -60,6 +60,20 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     // ---------------------------------
+    loadUserRequest: (state) => {
+      state.loading = true;
+    },
+    loadUserSuccess: (state, action) => {
+      state.loading = false;
+      state.user = action.payload.user;
+      state.isAuth = action.payload.auth;
+      state.success = action.payload.success;
+    },
+    loadUserFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // ------------------------------------
     clearError: (state) => {
       state.error = null;
     },
@@ -79,6 +93,9 @@ export const {
   activateUserRequest,
   activateUserSuccess,
   activateUserFail,
+  loadUserRequest,
+  loadUserSuccess,
+  loadUserFail,
   clearError,
   clearAuthSuccess,
 } = authSlice.actions;
