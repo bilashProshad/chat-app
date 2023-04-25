@@ -110,5 +110,10 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
 
 export const logout = catchAsyncErrors(async (req, res, next) => {
   res.clearCookie("token");
-  res.status(200).json({ success: true, user: null, auth: false });
+  res.status(200).json({
+    success: true,
+    user: null,
+    auth: false,
+    message: "Successfully logged out",
+  });
 });
