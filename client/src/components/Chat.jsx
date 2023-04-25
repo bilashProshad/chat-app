@@ -9,8 +9,8 @@ const Chat = ({ chat }) => {
 
   const dispatch = useDispatch();
 
-  const setCurrentChatHandler = (id) => {
-    dispatch(setCurrentChat(id));
+  const setCurrentChatHandler = (chat) => {
+    dispatch(setCurrentChat(chat));
   };
 
   const sender = getSender(user, chat.users);
@@ -23,7 +23,7 @@ const Chat = ({ chat }) => {
       p={1}
       borderRadius={2}
       borderBottom={"1px solid #eee"}
-      onClick={() => setCurrentChatHandler(chat._id)}
+      onClick={() => setCurrentChatHandler(chat)}
       sx={{
         cursor: "pointer",
         transition: "all 0.4s",
