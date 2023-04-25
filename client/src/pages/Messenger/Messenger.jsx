@@ -39,10 +39,31 @@ const Messenger = () => {
           <Chats chats={chats} loading={loading} />
           {/* ------- right ------- */}
           <Box flex={1} borderRight={"1px solid #eee"} height={"100%"}>
-            <ChatTopBar currentChat={currentChat} />
+            {currentChat._id && (
+              <>
+                <ChatTopBar currentChat={currentChat} />
 
-            {/* =========== Conversation =========== */}
-            <Conversation currentChat={currentChat._id} />
+                {/* =========== Conversation =========== */}
+                <Conversation currentChat={currentChat._id} />
+              </>
+            )}
+            {!currentChat.id && (
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"center"}
+                height={"80%"}
+              >
+                <Typography
+                  textAlign={"center"}
+                  component={"p"}
+                  variant="h5"
+                  color={"GrayText"}
+                >
+                  Select a chat to start conversation
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
         {/* </Container> */}

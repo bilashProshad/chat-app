@@ -4,6 +4,7 @@ import { userInfoReducer } from "./slices/userInfoSlice";
 import { chatsReducer } from "./slices/chatsSlice";
 import { conversationReducer } from "./slices/conversationSlice";
 import { currentChatReducer } from "./slices/currentChatSlice";
+import { messageReducer } from "./slices/messageSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     chats: chatsReducer,
     currentChat: currentChatReducer,
     conversation: conversationReducer,
+    message: messageReducer,
   },
 });
 

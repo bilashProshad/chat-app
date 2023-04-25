@@ -1,21 +1,40 @@
 import { Box } from "@mui/material";
 import Message from "./Message";
 import ChatInput from "./ChatInput/ChatInput";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchConversation } from "../redux/actions/messageAction";
 import toast from "react-hot-toast";
-import { clearConversationError } from "../redux/slices/conversationSlice";
+import {
+  clearConversationError,
+  updateConversation,
+} from "../redux/slices/conversationSlice";
 import Loading from "./Loading";
 import { myMessage } from "../utils/ChatLogics";
+import { clearSendMessageError } from "../redux/slices/messageSlice";
+import { sendMessage } from "../redux/actions/messageAction";
 
 const Conversation = ({ currentChat }) => {
+  const [text, setText] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { conversation, loading, error } = useSelector(
     (state) => state.conversation
   );
+  const { message, error: messageError } = useSelector(
+    (state) => state.message
+  );
 
   const dispatch = useDispatch();
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+
+    if (!text) return;
+
+    dispatch(sendMessage({ text, chatId: currentChat }));
+
+    setText("");
+  };
 
   useEffect(() => {
     if (!currentChat) return;
@@ -23,11 +42,20 @@ const Conversation = ({ currentChat }) => {
   }, [currentChat, dispatch]);
 
   useEffect(() => {
+    dispatch(updateConversation(message));
+  }, [message]);
+
+  useEffect(() => {
     if (error) {
       toast.error(error);
       dispatch(clearConversationError());
     }
-  }, [error, dispatch]);
+
+    if (messageError) {
+      toast.error(messageError);
+      dispatch(clearSendMessageError());
+    }
+  }, [error, dispatch, messageError]);
 
   return (
     <Box
@@ -71,7 +99,11 @@ const Conversation = ({ currentChat }) => {
         </Box>
       </Box>
       <Box display={"flex"} alignItems={"center"} sx={{ width: "100%" }}>
-        <ChatInput />
+        <ChatInput
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onSubmit={onSubmitHandler}
+        />
       </Box>
     </Box>
   );

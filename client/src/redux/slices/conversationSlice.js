@@ -23,6 +23,9 @@ const conversationSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateConversation: (state, action) => {
+      state.conversation.push(action.payload);
+    },
     clearConversationError: (state) => {
       state.error = null;
     },
@@ -36,6 +39,7 @@ export const {
   fetchConversationFail,
   fetchConversationRequest,
   fetchConversationSucccess,
+  updateConversation,
   clearConversationError,
   clearConversationSuccess,
 } = conversationSlice.actions;
