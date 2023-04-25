@@ -1,6 +1,20 @@
 import { Avatar, Box, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
+import { getSender } from "../utils/ChatLogics";
+import { useDispatch } from "react-redux";
+import { setCurrentChat } from "../redux/slices/currentChatSlice";
 
-const Chat = () => {
+const Chat = ({ chat }) => {
+  const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  const setCurrentChatHandler = (id) => {
+    dispatch(setCurrentChat(id));
+  };
+
+  const sender = getSender(user, chat.users);
+
   return (
     <Box
       display={"flex"}
@@ -9,6 +23,7 @@ const Chat = () => {
       p={1}
       borderRadius={2}
       borderBottom={"1px solid #eee"}
+      onClick={() => setCurrentChatHandler(chat._id)}
       sx={{
         cursor: "pointer",
         transition: "all 0.4s",
@@ -18,12 +33,14 @@ const Chat = () => {
       }}
     >
       <Box display={"flex"} alignItems={"center"} gap={1}>
-        <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+        <Avatar alt={sender?.name} src={sender?.avatar?.url} />
         <Box>
           <Typography variant="h6" fontSize={16} fontWeight={"bold"}>
-            Bilash Prosad
+            {sender?.name}
           </Typography>
-          <Typography variant="caption">Hey, how are you?</Typography>
+          <Typography variant="caption">
+            {chat?.lastestMessage?.text}
+          </Typography>
         </Box>
       </Box>
       <Typography fontSize={12}>1h</Typography>

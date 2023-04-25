@@ -78,9 +78,7 @@ export default function ProfileMenu() {
               src={user?.avatar?.url}
               alt={user?.name}
               sx={{ width: 32, height: 32 }}
-            >
-              alt={user?.name}
-            </Avatar>
+            />
           </IconButton>
         </Tooltip>
       </Box>

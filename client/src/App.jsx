@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Authenticate from "./pages/Authenticate/Authenticate";
 import Activate from "./pages/Activate/Activate";
-import Chats from "./pages/Chats/Chats";
+import Messenger from "./pages/Messenger/Messenger";
 import { Toaster } from "react-hot-toast";
 import PublicRoute from "./components/Route/PublicRoute";
 import SemiProtectedRoute from "./components/Route/SemiProtectedRoute";
@@ -27,7 +27,7 @@ function App() {
         </Route>
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/messages" element={<Chats />} />
+          <Route path="/messages" element={<Messenger />} />
         </Route>
       </Routes>
 

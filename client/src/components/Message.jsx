@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 
-const Message = ({ self = false }) => {
+const Message = ({ message, self = false }) => {
   return (
     <>
       {self ? (
@@ -19,13 +19,13 @@ const Message = ({ self = false }) => {
 
             borderRadius={"10px 0px 10px 10px"}
           >
-            Hello
+            {message.text}
           </Typography>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+          <Avatar alt={message.sender.name} src={message.sender?.avatar?.url} />
         </Box>
       ) : (
         <Box display={"flex"} alignItems={"center"} gap={1}>
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+          <Avatar alt={message.sender.name} src={message.sender?.avatar?.url} />
           <Typography
             sx={{ backgroundColor: "#e4e6eb", color: "#333" }}
             padding={1}
@@ -34,7 +34,7 @@ const Message = ({ self = false }) => {
             // minWidth={"10rem"}
             borderRadius={"0 10px 10px 10px"}
           >
-            Hello
+            {message.text}
           </Typography>
         </Box>
       )}
