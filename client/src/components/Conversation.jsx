@@ -20,6 +20,8 @@ const ENDPOINT = import.meta.env.VITE_APP_SERVER;
 const Conversation = ({ currentChat }) => {
   const socket = useRef(null);
   const selectedChatCompare = useRef();
+  const bottomRef = useRef(null);
+
   const [socketConnected, setSocketConnected] = useState(false);
 
   const [text, setText] = useState("");
@@ -69,11 +71,10 @@ const Conversation = ({ currentChat }) => {
       ) {
         // give notification
       } else {
-        console.log(newMessageReceived);
         dispatch(updateConversation(newMessageReceived));
       }
     });
-  }, [socket.current, dispatch]);
+  }, [socket, dispatch]);
 
   useEffect(() => {
     dispatch(updateConversation(message));
@@ -93,6 +94,11 @@ const Conversation = ({ currentChat }) => {
       dispatch(clearSendMessageError());
     }
   }, [error, dispatch, messageError]);
+
+  useEffect(() => {
+    // 👇️ scroll to bottom every time messages change
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [conversation]);
 
   return (
     <Box
@@ -133,6 +139,8 @@ const Conversation = ({ currentChat }) => {
                 />
               );
             })}
+
+          <div ref={bottomRef} />
         </Box>
       </Box>
       <Box display={"flex"} alignItems={"center"} sx={{ width: "100%" }}>
