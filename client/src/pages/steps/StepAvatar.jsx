@@ -85,7 +85,7 @@ const StepAvatar = () => {
                 alignItems: "center",
               }}
             >
-              <img src={photo1} alt="photo 1" style={{ width: "100%" }} />
+              <img src={photo1} alt="photo1" style={{ width: "100%" }} />
             </Box>
             <Box width={"28rem"}>
               <Box sx={{ mb: 4 }}>

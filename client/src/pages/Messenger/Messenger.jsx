@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Layout from "../../components/Layout";
 
 import { useEffect } from "react";

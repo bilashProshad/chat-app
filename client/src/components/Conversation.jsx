@@ -55,9 +55,7 @@ const Conversation = ({ currentChat }) => {
     if (!currentChat) return;
     dispatch(fetchConversation(currentChat._id));
 
-    if (!loading) {
-      socket.current.emit("join chat", currentChat._id);
-    }
+    socket.current.emit("join chat", currentChat._id);
 
     selectedChatCompare.current = currentChat;
     // console.log(selectedChatCompare.current);

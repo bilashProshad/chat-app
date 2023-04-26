@@ -1,11 +1,4 @@
-import {
-  AppBar,
-  Badge,
-  Box,
-  Container,
-  IconButton,
-  Toolbar,
-} from "@mui/material";
+import { AppBar, Badge, Box, IconButton, Toolbar } from "@mui/material";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import NotificationsIcon from "@mui/icons-material/Notifications";

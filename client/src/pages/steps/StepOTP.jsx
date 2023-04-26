@@ -44,7 +44,7 @@ const StepOTP = ({ onPrev }) => {
       dispatch(clearAuthSuccess());
       navigate("/activate");
     }
-  }, [error, success, dispatch, navigate]);
+  }, [error, success, dispatch, navigate, onPrev]);
 
   return (
     <>
@@ -69,7 +69,7 @@ const StepOTP = ({ onPrev }) => {
                 alignItems: "center",
               }}
             >
-              <img src={photo2} alt="photo 2" style={{ width: "100%" }} />
+              <img src={photo2} alt="photo2" style={{ width: "100%" }} />
             </Box>
             <Box width={"28rem"}>
               <Box sx={{ mb: 4 }}>
