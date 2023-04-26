@@ -44,10 +44,10 @@ const Messenger = () => {
                 <ChatTopBar currentChat={currentChat} />
 
                 {/* =========== Conversation =========== */}
-                <Conversation currentChat={currentChat._id} />
+                <Conversation currentChat={currentChat} />
               </>
             )}
-            {!currentChat.id && (
+            {!currentChat._id && (
               <Box
                 display={"flex"}
                 alignItems={"center"}

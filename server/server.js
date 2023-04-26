@@ -10,10 +10,14 @@ import cloudinary from "cloudinary";
 import { chatRoutes } from "./routes/chatRoutes.js";
 import { messageRoutes } from "./routes/messageRoutes.js";
 import cors from "cors";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 const app = express();
 
 dotenv.config();
+
+const server = createServer(app);
 
 // Handling Uncaught Exception
 process.on("uncaughtException", (err) => {
@@ -50,7 +54,44 @@ app.use("/api/v1/message", messageRoutes);
 
 app.use(errorMiddleware);
 
-const server = app.listen(process.env.PORT, () => {
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: process.env.FRONT_END_URL,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("connected to socket.io");
+
+  socket.on("setup", (userData) => {
+    socket.join(userData._id);
+    socket.emit("connected");
+  });
+
+  socket.on("join chat", (room) => {
+    socket.join(room);
+    console.log("user joined room:", room);
+  });
+
+  socket.on("new message", (newMessageReceived) => {
+    let chat = newMessageReceived.chat;
+
+    if (!chat.users) {
+      return console.log("chat.users not defined");
+    }
+
+    chat.users.forEach((user) => {
+      // if logged user and sender is same, then it'll return
+      if (user._id == newMessageReceived.sender._id) return;
+
+      // "in" means inside that user's room, emit/send that message
+      socket.in(user._id).emit("message received", newMessageReceived);
+    });
+  });
+});
+
+server.listen(process.env.PORT, () => {
   console.log(`Listening on port ${process.env.PORT}`);
 });
 

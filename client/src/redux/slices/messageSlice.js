@@ -26,6 +26,12 @@ const messageSlice = createSlice({
     clearSendMessageError: (state) => {
       state.error = null;
     },
+    resetSendMessage: (state) => {
+      state.success = false;
+      state.message = {};
+      state.error = false;
+      state.loading = false;
+    },
   },
 });
 
@@ -34,6 +40,7 @@ export const {
   sendMessageRequest,
   sendMessageSuccess,
   clearSendMessageError,
+  resetSendMessage,
 } = messageSlice.actions;
 
 export const messageReducer = messageSlice.reducer;

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import Message from "./Message";
 import ChatInput from "./ChatInput/ChatInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchConversation } from "../redux/actions/messageAction";
 import toast from "react-hot-toast";
@@ -13,8 +13,15 @@ import Loading from "./Loading";
 import { myMessage } from "../utils/ChatLogics";
 import { clearSendMessageError } from "../redux/slices/messageSlice";
 import { sendMessage } from "../redux/actions/messageAction";
+import io from "socket.io-client";
+
+const ENDPOINT = import.meta.env.VITE_APP_SERVER;
 
 const Conversation = ({ currentChat }) => {
+  const socket = useRef(null);
+  const selectedChatCompare = useRef();
+  const [socketConnected, setSocketConnected] = useState(false);
+
   const [text, setText] = useState("");
   const { user } = useSelector((state) => state.auth);
   const { conversation, loading, error } = useSelector(
@@ -31,19 +38,49 @@ const Conversation = ({ currentChat }) => {
 
     if (!text) return;
 
-    dispatch(sendMessage({ text, chatId: currentChat }));
+    dispatch(sendMessage({ text, chatId: currentChat._id }));
 
     setText("");
   };
 
   useEffect(() => {
+    socket.current = io(ENDPOINT);
+    socket.current.emit("setup", user);
+    socket.current.on("connection", () => setSocketConnected(true));
+  }, [user]);
+
+  useEffect(() => {
     if (!currentChat) return;
-    dispatch(fetchConversation(currentChat));
+    dispatch(fetchConversation(currentChat._id));
+
+    if (!loading) {
+      socket.current.emit("join chat", currentChat._id);
+    }
+
+    selectedChatCompare.current = currentChat;
+    // console.log(selectedChatCompare.current);
   }, [currentChat, dispatch]);
 
   useEffect(() => {
+    socket.current.on("message received", (newMessageReceived) => {
+      if (
+        !selectedChatCompare.current ||
+        selectedChatCompare.current._id !== newMessageReceived.chat._id
+      ) {
+        // give notification
+      } else {
+        console.log(newMessageReceived);
+        dispatch(updateConversation(newMessageReceived));
+      }
+    });
+  }, [socket.current, dispatch]);
+
+  useEffect(() => {
     dispatch(updateConversation(message));
-  }, [message]);
+    if (message && message.chat && message.chat.users.length > 0) {
+      socket.current.emit("new message", message);
+    }
+  }, [message, dispatch]);
 
   useEffect(() => {
     if (error) {
