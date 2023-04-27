@@ -1,6 +1,7 @@
 import express from "express";
 import {
   activate,
+  allUsers,
   getUserDetails,
   logout,
   sendOtp,
@@ -14,6 +15,7 @@ router.route("/send-otp").post(sendOtp);
 router.route("/verify-otp").post(verifyOtp);
 router.route("/activate").post(isAuthenticatedUser, activate);
 router.route("/me").get(isAuthenticatedUser, getUserDetails);
+router.route("/").get(isAuthenticatedUser, allUsers);
 router.route("/logout").get(logout);
 
 export const userRoutes = router;
