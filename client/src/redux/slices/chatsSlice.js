@@ -23,6 +23,9 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateChat: (state, action) => {
+      state.chats = [action.payload, ...state.chats];
+    },
     clearFetchAllChatError: (state) => {
       state.error = null;
     },
@@ -34,6 +37,7 @@ export const {
   fetchAllChatRequest,
   fetchAllChatSuccess,
   clearFetchAllChatError,
+  updateChat,
 } = chatsSlice.actions;
 
 export const chatsReducer = chatsSlice.reducer;
