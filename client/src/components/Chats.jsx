@@ -1,11 +1,14 @@
 import { Box } from "@mui/material";
 import LoadingChats from "./LoadingChats";
 import Chat from "./Chat";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Chats = ({ chats = [], loading = false }) => {
+  const matches = useMediaQuery("(max-width:768px)");
+
   return (
     <Box
-      width={"300px"}
+      width={matches ? "100%" : "300px"}
       borderRight={"1px solid #ddd"}
       padding={3}
       overflow={"scroll"}
