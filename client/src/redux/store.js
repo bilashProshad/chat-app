@@ -7,6 +7,7 @@ import { currentChatReducer } from "./slices/currentChatSlice";
 import { messageReducer } from "./slices/messageSlice";
 import { searchUserReducer } from "./slices/searchUserSlice";
 import { addToChatReducer } from "./slices/addToChatSlice";
+import { notificationReducer } from "./slices/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     message: messageReducer,
     searchUser: searchUserReducer,
     addToChat: addToChatReducer,
+    notification: notificationReducer,
   },
 });
 

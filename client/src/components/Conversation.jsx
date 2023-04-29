@@ -16,12 +16,14 @@ import { sendMessage } from "../redux/actions/messageAction";
 import io from "socket.io-client";
 import Lottie from "lottie-react";
 import typingAnimation from "../animations/typing.json";
+import { setNotification } from "../redux/slices/notificationSlice";
+import { fetchChats } from "../redux/actions/chatAction";
 
 const ENDPOINT = import.meta.env.VITE_APP_SERVER;
 
 const Conversation = ({ currentChat }) => {
   const socket = useRef(null);
-  const selectedChatCompare = useRef();
+  const selectedChatCompare = useRef(null);
   const bottomRef = useRef(null);
 
   const [socketConnected, setSocketConnected] = useState(false);
@@ -36,6 +38,7 @@ const Conversation = ({ currentChat }) => {
   const { message, error: messageError } = useSelector(
     (state) => state.message
   );
+  const { notification } = useSelector((state) => state.notification);
 
   const dispatch = useDispatch();
 
@@ -64,11 +67,15 @@ const Conversation = ({ currentChat }) => {
         selectedChatCompare.current._id !== newMessageReceived.chat._id
       ) {
         // give notification
+        if (!notification.includes(newMessageReceived)) {
+          dispatch(fetchChats());
+          dispatch(setNotification(newMessageReceived));
+        }
       } else {
         dispatch(updateConversation(newMessageReceived));
       }
     });
-  }, [socket, dispatch]);
+  }, [dispatch, notification]);
 
   useEffect(() => {
     dispatch(updateConversation(message));
@@ -163,13 +170,11 @@ const Conversation = ({ currentChat }) => {
               const isMyMessage = myMessage(user._id, message.sender._id);
 
               return (
-                <>
-                  <Message
-                    key={message._id}
-                    message={message}
-                    self={isMyMessage}
-                  />
-                </>
+                <Message
+                  key={message._id}
+                  message={message}
+                  self={isMyMessage}
+                />
               );
             })}
 

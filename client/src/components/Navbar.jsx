@@ -8,9 +8,12 @@ import Search from "./Search";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import SearchDrawer from "./SearchDrawer";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const matches = useMediaQuery((theme) => theme.breakpoints.up("sm"));
+
+  const { notification } = useSelector((state) => state.notification);
 
   const [state, setState] = useState({
     top: false,
@@ -70,15 +73,19 @@ const Navbar = () => {
             </IconButton>
           )}
 
-          <Box display={"flex"} alignItems={"center"} gap={2}>
+          <Box display={"flex"} alignItems={"center"} gap={2} marginLeft={2}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              {notification.length > 0 ? (
+                <Badge badgeContent={1} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              ) : (
                 <NotificationsIcon />
-              </Badge>
+              )}
             </IconButton>
 
             <ProfileMenu />
