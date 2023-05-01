@@ -51,7 +51,7 @@ const StepOTP = ({ onPrev }) => {
       {loading ? (
         <Loading />
       ) : (
-        <Card sx={{ mt: "7rem" }}>
+        <Card>
           <CardContent
             sx={{
               display: "flex",

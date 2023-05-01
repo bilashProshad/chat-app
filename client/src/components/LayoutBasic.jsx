@@ -6,12 +6,10 @@ const LayoutBasic = ({ children }) => {
     <>
       <NavBasic />
       <Container
-        sx={
-          {
-            // height: "calc(100svh)",
-            // mt: 7,
-          }
-        }
+        sx={{
+          // height: "calc(100svh - 5rem)",
+          mt: 7,
+        }}
         maxWidth="md"
       >
         {children}

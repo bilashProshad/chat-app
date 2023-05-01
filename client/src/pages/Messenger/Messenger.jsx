@@ -74,7 +74,8 @@ const Messenger = () => {
       .on("message received", (newMessageReceived) => {
         if (!currentChat || currentChat._id !== newMessageReceived.chat._id) {
           // give notification
-          if (!notification.includes(newMessageReceived)) {
+
+          if (!notification.find((n) => n._id === newMessageReceived._id)) {
             dispatch(fetchChats());
             dispatch(setNotification(newMessageReceived));
           }

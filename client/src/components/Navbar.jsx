@@ -9,11 +9,19 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import SearchDrawer from "./SearchDrawer";
 import { useSelector } from "react-redux";
+import NotificationsDrawer from "./NotificationsDrawer";
 
 const Navbar = () => {
-  const matches = useMediaQuery((theme) => theme.breakpoints.up("sm"));
+  const matches = useMediaQuery("(min-width:768px)");
 
   const { notification } = useSelector((state) => state.notification);
+
+  const [searchState, setSearchState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
 
   const [state, setState] = useState({
     top: false,
@@ -21,6 +29,17 @@ const Navbar = () => {
     bottom: false,
     right: false,
   });
+
+  const toggleSearchDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setSearchState({ ...searchState, [anchor]: open });
+  };
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -37,12 +56,19 @@ const Navbar = () => {
     <Box sx={{ borderBottom: "1px solid #ddd" }}>
       {!matches && (
         <SearchDrawer
-          state={state}
-          onClose={toggleDrawer("top", false)}
-          setState={setState}
+          state={searchState}
+          setState={setSearchState}
+          onClose={toggleSearchDrawer("top", false)}
         />
       )}
       {/* ----------------------------------------- */}
+      <NotificationsDrawer
+        state={state}
+        setState={setState}
+        onClose={toggleDrawer(!matches ? "top" : "right", false)}
+      />
+      {/* ----------------------------------------- */}
+
       <AppBar
         position="static"
         color="default"
@@ -65,7 +91,7 @@ const Navbar = () => {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
-              onClick={toggleDrawer("top", true)}
+              onClick={toggleSearchDrawer("top", true)}
             >
               <Badge color="error">
                 <SearchIcon />
@@ -74,19 +100,30 @@ const Navbar = () => {
           )}
 
           <Box display={"flex"} alignItems={"center"} gap={2} marginLeft={2}>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              {notification.length > 0 ? (
+            {notification.length > 0 ? (
+              <IconButton
+                size="large"
+                aria-label="show new notifications"
+                color="inherit"
+                sx={{ position: "relative" }}
+                onClick={toggleDrawer(!matches ? "top" : "right", true)}
+              >
                 <Badge badgeContent={1} color="error">
                   <NotificationsIcon />
                 </Badge>
-              ) : (
-                <NotificationsIcon />
-              )}
-            </IconButton>
+              </IconButton>
+            ) : (
+              <IconButton
+                size="large"
+                aria-label="show new notifications"
+                color="inherit"
+                sx={{ position: "relative" }}
+              >
+                <Badge color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            )}
 
             <ProfileMenu />
           </Box>
