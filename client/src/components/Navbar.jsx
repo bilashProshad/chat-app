@@ -4,7 +4,6 @@ import logo from "../assets/logo.svg";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ProfileMenu from "./ProfileMenu";
-import Search from "./Search";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import SearchDrawer from "./SearchDrawer";
@@ -54,13 +53,13 @@ const Navbar = () => {
 
   return (
     <Box sx={{ borderBottom: "1px solid #ddd" }}>
-      {!matches && (
-        <SearchDrawer
-          state={searchState}
-          setState={setSearchState}
-          onClose={toggleSearchDrawer("top", false)}
-        />
-      )}
+      {/* {!matches && (
+        )} */}
+      <SearchDrawer
+        state={searchState}
+        setState={setSearchState}
+        onClose={toggleSearchDrawer(!matches ? "top" : "right", false)}
+      />
       {/* ----------------------------------------- */}
       <NotificationsDrawer
         state={state}
@@ -84,22 +83,22 @@ const Navbar = () => {
             />
           </Link>
 
-          {matches ? (
+          {/* {matches ? (
             <Search />
           ) : (
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              onClick={toggleSearchDrawer("top", true)}
-            >
-              <Badge color="error">
-                <SearchIcon />
-              </Badge>
-            </IconButton>
-          )}
+          )} */}
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="inherit"
+            onClick={toggleSearchDrawer(!matches ? "top" : "right", true)}
+          >
+            <Badge color="error">
+              <SearchIcon />
+            </Badge>
+          </IconButton>
 
-          <Box display={"flex"} alignItems={"center"} gap={2} marginLeft={2}>
+          <Box display={"flex"} alignItems={"center"}>
             {notification.length > 0 ? (
               <IconButton
                 size="large"

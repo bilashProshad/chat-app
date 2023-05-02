@@ -1,4 +1,11 @@
-import { Avatar, Box, Button, Drawer, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Drawer,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,6 +23,7 @@ import {
   resetAddToChat,
 } from "../redux/slices/addToChatSlice";
 import { updateChat } from "../redux/slices/chatsSlice";
+import { setCurrentChat } from "../redux/slices/currentChatSlice";
 
 const SearchDrawer = ({ state, onClose, setState }) => {
   const [search, setSearch] = useState("");
@@ -23,13 +31,16 @@ const SearchDrawer = ({ state, onClose, setState }) => {
   const { newChat, error: newChatError } = useSelector(
     (state) => state.addToChat
   );
+  const matches = useMediaQuery("(max-width:768px)");
 
   const dispatch = useDispatch();
 
   const addToChatHandler = (userId) => {
     dispatch(addUserToChat(userId));
     dispatch(resetSearchUser());
-    setState({ ...state, top: false });
+    matches
+      ? setState({ ...state, top: false })
+      : setState({ ...state, right: false });
   };
 
   useEffect(() => {
@@ -54,6 +65,7 @@ const SearchDrawer = ({ state, onClose, setState }) => {
 
     if (newChat) {
       dispatch(updateChat(newChat));
+      dispatch(setCurrentChat(newChat));
       dispatch(resetAddToChat());
     }
   }, [dispatch, newChat, newChatError]);
@@ -66,7 +78,11 @@ const SearchDrawer = ({ state, onClose, setState }) => {
   }, [error, dispatch]);
 
   return (
-    <Drawer anchor={"top"} open={state["top"]} onClose={onClose}>
+    <Drawer
+      anchor={matches ? "top" : "right"}
+      open={state[matches ? "top" : "right"]}
+      onClose={onClose}
+    >
       <Box padding={"1rem"} paddingTop={"2rem"}>
         <Search sx={{ borderBottom: "1px solid #999" }}>
           <SearchIconWrapper>

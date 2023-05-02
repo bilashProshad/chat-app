@@ -11,9 +11,12 @@ const currentChatSlice = createSlice({
     setCurrentChat: (state, action) => {
       state.currentChat = action.payload;
     },
+    resetCurrentChat: (state) => {
+      state.currentChat = {};
+    },
   },
 });
 
-export const { setCurrentChat } = currentChatSlice.actions;
+export const { setCurrentChat, resetCurrentChat } = currentChatSlice.actions;
 
 export const currentChatReducer = currentChatSlice.reducer;

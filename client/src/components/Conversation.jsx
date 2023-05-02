@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import Loading from "./Loading";
 import { myMessage } from "../utils/ChatLogics";
@@ -19,6 +19,8 @@ const Conversation = ({
   const bottomRef = useRef(null);
   const { user } = useSelector((state) => state.auth);
 
+  const matches = useMediaQuery("(max-width:768px)");
+
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -26,11 +28,12 @@ const Conversation = ({
 
   return (
     <Box
-      height={"90%"}
+      height={matches ? "100%" : "90%"}
       display={"flex"}
       flexDirection={"column"}
       justifyContent={"space-between"}
       alignItems={"center"}
+      paddingBottom={matches ? "0" : "1rem"}
       // sx={{ backgroundColor: "#eee" }}
     >
       {/* =========== Conversation ============= */}

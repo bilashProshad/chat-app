@@ -6,6 +6,7 @@ import { setCurrentChat } from "../redux/slices/currentChatSlice";
 
 const Chat = ({ chat }) => {
   const { user } = useSelector((state) => state.auth);
+  const { currentChat } = useSelector((state) => state.currentChat);
 
   const dispatch = useDispatch();
 
@@ -28,13 +29,14 @@ const Chat = ({ chat }) => {
         cursor: "pointer",
         transition: "all 0.4s",
         "&:hover": {
-          backgroundColor: "#9993",
+          backgroundColor: currentChat._id === chat._id ? "" : "#9993",
         },
+        backgroundColor: currentChat._id === chat._id ? "#1E71FF" : "",
       }}
     >
       <Box display={"flex"} alignItems={"center"} gap={1}>
         <Avatar alt={sender?.name} src={sender?.avatar?.url} />
-        <Box>
+        <Box color={currentChat._id === chat._id ? "#fff" : ""}>
           <Typography variant="h6" fontSize={16} fontWeight={"bold"}>
             {sender?.name}
           </Typography>
@@ -43,7 +45,12 @@ const Chat = ({ chat }) => {
           </Typography>
         </Box>
       </Box>
-      <Typography fontSize={12}>1h</Typography>
+      <Typography
+        fontSize={12}
+        color={currentChat._id === chat._id ? "#fff" : ""}
+      >
+        1h
+      </Typography>
     </Box>
   );
 };

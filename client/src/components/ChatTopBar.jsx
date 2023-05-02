@@ -1,12 +1,23 @@
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Typography, useMediaQuery } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { getSender } from "../utils/ChatLogics";
 import { useSelector } from "react-redux";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import IconButton from "@mui/material/IconButton";
+import { useDispatch } from "react-redux";
+import { resetCurrentChat } from "../redux/slices/currentChatSlice";
 
 const ChatTopBar = ({ currentChat }) => {
   const { user } = useSelector((state) => state.auth);
 
+  const matches = useMediaQuery("(max-width:768px)");
+  const dispatch = useDispatch();
+
   const sender = getSender(user, currentChat.users);
+
+  const backButtonHandler = () => {
+    dispatch(resetCurrentChat());
+  };
 
   return (
     <Box
@@ -19,6 +30,11 @@ const ChatTopBar = ({ currentChat }) => {
       bgcolor={"#fff"}
     >
       <Box display={"flex"} alignItems={"center"} gap={1}>
+        {matches && (
+          <IconButton aria-label="back" onClick={backButtonHandler}>
+            <ArrowBackIcon color="primary" />
+          </IconButton>
+        )}
         <Avatar
           alt={sender.name}
           src={sender?.avatar?.url}
@@ -27,9 +43,9 @@ const ChatTopBar = ({ currentChat }) => {
         <Typography fontWeight={"bold"}>{sender.name}</Typography>
       </Box>
       <Box>
-        <Button>
-          <InfoIcon fontSize="medium" />
-        </Button>
+        <IconButton aria-label="info">
+          <InfoIcon fontSize="medium" color="primary" />
+        </IconButton>
       </Box>
     </Box>
   );
