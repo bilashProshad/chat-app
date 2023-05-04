@@ -66,3 +66,94 @@ export const fetchChats = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({ success: true, chats });
 });
+
+export const createGroupChat = catchAsyncErrors(async (req, res, next) => {
+  let { users, name } = req.body;
+
+  if (!users || !name) {
+    return next(new ErrorHandler(400, "Fill all the fields"));
+  }
+
+  users = JSON.parse(users);
+
+  if (users.length < 2) {
+    return next(
+      new ErrorHandler(
+        400,
+        "More than 2 users are required to form a group chat"
+      )
+    );
+  }
+
+  users.push(req.user._id);
+
+  let groupChat = await Chat.create({
+    chatName: name,
+    isGroupChat: true,
+    users,
+    groupAdmin: req.user._id,
+  });
+
+  groupChat = await Chat.findById(groupChat._id)
+    .populate("users")
+    .populate("groupAdmin");
+
+  res.status(201).json({ success: true, groupChat });
+});
+
+export const renameGroupChat = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const { chatName } = req.body;
+
+  const updatedChat = await Chat.findByIdAndUpdate(
+    id,
+    { chatName },
+    { new: true }
+  )
+    .populate("users")
+    .populate("groupAdmin");
+
+  if (!updatedChat) {
+    return next(new ErrorHandler(404, "Chat not found"));
+  }
+
+  res.status(200).json({ success: true, updatedChat });
+});
+
+export const addUserToGroup = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  const added = await Chat.findByIdAndUpdate(
+    id,
+    { $push: { users: userId } },
+    { new: true }
+  )
+    .populate("users")
+    .populate("groupAdmin");
+
+  if (!added) {
+    return next(new ErrorHandler(404, "Chat not found"));
+  }
+
+  res.status(200).json({ success: true, added });
+});
+
+export const removeFromGroup = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  const removed = await Chat.findByIdAndUpdate(
+    id,
+    { $pull: { users: userId } },
+    { new: true }
+  )
+    .populate("users")
+    .populate("groupAdmin");
+
+  if (!removed) {
+    return next(new ErrorHandler(404, "Chat not found"));
+  }
+
+  res.status(200).json({ success: true, removed });
+});
