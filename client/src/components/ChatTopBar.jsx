@@ -1,4 +1,10 @@
-import { Avatar, Box, Typography, useMediaQuery } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { getSender } from "../utils/ChatLogics";
 import { useSelector } from "react-redux";
@@ -35,12 +41,22 @@ const ChatTopBar = ({ currentChat }) => {
             <ArrowBackIcon color="primary" />
           </IconButton>
         )}
-        <Avatar
-          alt={sender.name}
-          src={sender?.avatar?.url}
-          sx={{ width: "32px", height: "32px" }}
-        />
-        <Typography fontWeight={"bold"}>{sender.name}</Typography>
+        {currentChat.isGroupChat ? (
+          <AvatarGroup max={3} spacing={"small"}>
+            {currentChat.users.map((user) => (
+              <Avatar key={user._id} alt={user?.name} src={user?.avatar?.url} />
+            ))}
+          </AvatarGroup>
+        ) : (
+          <Avatar
+            alt={sender.name}
+            src={sender?.avatar?.url}
+            sx={{ width: "32px", height: "32px" }}
+          />
+        )}
+        <Typography fontWeight={"bold"}>
+          {currentChat.isGroupChat ? currentChat.chatName : sender.name}
+        </Typography>
       </Box>
       <Box>
         <IconButton aria-label="info">

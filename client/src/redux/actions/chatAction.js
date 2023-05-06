@@ -1,5 +1,10 @@
 import api from "../../http";
 import {
+  addGroupChatFail,
+  addGroupChatRequest,
+  addGroupChatSuccess,
+} from "../slices/AddGroupChatSlice";
+import {
   addToChatFail,
   addToChatRequest,
   addToChatSuccess,
@@ -33,3 +38,19 @@ export const addUserToChat = (userId) => async (dispatch) => {
     dispatch(addToChatFail(error.response.data.message));
   }
 };
+
+export const createGroupChat =
+  ({ name, users }) =>
+  async (dispatch) => {
+    try {
+      dispatch(addGroupChatRequest());
+
+      const { data } = await api.post(`/api/v1/chat/group`, { name, users });
+
+      dispatch(
+        addGroupChatSuccess({ chat: data.groupChat, success: data.success })
+      );
+    } catch (error) {
+      dispatch(addGroupChatFail(error.response.data.message));
+    }
+  };

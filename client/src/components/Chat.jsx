@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, AvatarGroup, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getSender } from "../utils/ChatLogics";
 import { useDispatch } from "react-redux";
@@ -35,10 +35,18 @@ const Chat = ({ chat }) => {
       }}
     >
       <Box display={"flex"} alignItems={"center"} gap={1}>
-        <Avatar alt={sender?.name} src={sender?.avatar?.url} />
+        {chat.isGroupChat ? (
+          <AvatarGroup max={3} spacing={30}>
+            {chat.users.map((user) => (
+              <Avatar key={user._id} alt={user?.name} src={user?.avatar?.url} />
+            ))}
+          </AvatarGroup>
+        ) : (
+          <Avatar alt={sender.name} src={sender?.avatar?.url} />
+        )}
         <Box color={currentChat._id === chat._id ? "#fff" : ""}>
           <Typography variant="h6" fontSize={16} fontWeight={"bold"}>
-            {sender?.name}
+            {chat.isGroupChat ? chat.chatName : sender?.name}
           </Typography>
           <Typography variant="caption">
             {chat?.lastestMessage?.text}

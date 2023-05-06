@@ -1,8 +1,19 @@
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Button, TextField } from "@mui/material";
-import { useState } from "react";
+import { Avatar, Button, TextField } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { searchUser } from "../redux/actions/searchUserAction";
+import CloseIcon from "@mui/icons-material/Close";
+import { createGroupChat } from "../redux/actions/chatAction";
+import { resetSearchUser } from "../redux/slices/searchUserSlice";
+import toast from "react-hot-toast";
+import { clearAddToChatError } from "../redux/slices/addToChatSlice";
+import { updateChat } from "../redux/slices/chatsSlice";
+import { setCurrentChat } from "../redux/slices/currentChatSlice";
+import CircularProgress from "@mui/material/CircularProgress";
+import { resetAddGroupChat } from "../redux/slices/AddGroupChatSlice";
 
 const style = {
   position: "absolute",
@@ -19,14 +30,67 @@ const style = {
 const GroupChatModal = ({ openModal, setOpenModal }) => {
   const [chatName, setChatName] = useState("");
   const [search, setSearch] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState([]);
+  const { users: searchResults } = useSelector((state) => state.searchUser);
+  const {
+    newChat,
+    loading,
+    error: newChatError,
+  } = useSelector((state) => state.addGroupChat);
+
+  const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpenModal(false);
   };
 
+  const removeselectedUsers = (user) => {
+    setSelectedUsers(selectedUsers.filter((u) => u._id !== user._id));
+  };
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
+
+    if (!chatName || selectedUsers.length < 0) {
+      return;
+    }
+
+    dispatch(resetSearchUser());
+
+    dispatch(
+      createGroupChat({
+        name: chatName,
+        users: JSON.stringify(selectedUsers.map((u) => u._id)),
+      })
+    );
   };
+
+  useEffect(() => {
+    let timeout;
+    if (search.length > 0) {
+      timeout = setTimeout(() => {
+        dispatch(searchUser(search));
+      }, 500);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [search, dispatch]);
+
+  useEffect(() => {
+    if (newChatError) {
+      toast.error(newChatError());
+      dispatch(clearAddToChatError());
+    }
+
+    if (newChat !== null) {
+      setChatName("");
+      setSelectedUsers([]);
+      dispatch(updateChat(newChat));
+      dispatch(setCurrentChat(newChat));
+      dispatch(resetAddGroupChat());
+      setOpenModal(false);
+    }
+  }, [dispatch, newChat, newChatError, setOpenModal]);
 
   return (
     <Modal
@@ -90,10 +154,65 @@ const GroupChatModal = ({ openModal, setOpenModal }) => {
               sx={{
                 textTransform: "none",
               }}
+              disabled={loading ? true : false}
             >
-              Create Chat
+              {loading ? (
+                <CircularProgress color="inherit" size={25} />
+              ) : (
+                "Create Chat"
+              )}
             </Button>
           </form>
+        </Box>
+        <Box mt={2}>
+          {selectedUsers.length > 0 &&
+            selectedUsers.map((user) => (
+              <Box
+                key={user._id}
+                component={"span"}
+                display={"inline-flex"}
+                alignItems={"center"}
+                padding={"5px 10px"}
+                borderRadius={"20px"}
+                mr={1}
+                sx={{
+                  backgroundColor: "#eee",
+                  cursor: "pointer",
+                  transition: "all 0.3s",
+                  "&:hover": { backgroundColor: "hsl(0, 0%, 85%)" },
+                }}
+                onClick={() => removeselectedUsers(user)}
+              >
+                {user.name} <CloseIcon fontSize="small" />
+              </Box>
+            ))}
+        </Box>
+        <Box mt={3}>
+          {searchResults.length > 0 &&
+            searchResults.map((user) => (
+              <Button
+                sx={{
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "10px",
+                  width: "100%",
+                  color: "#333",
+                  fontFamily: "inherit",
+                  backgroundColor: "#eee",
+                }}
+                key={user._id}
+                onClick={() => setSelectedUsers([...selectedUsers, user])}
+              >
+                <Avatar
+                  alt={user.name}
+                  src={user?.avatar?.url}
+                  sx={{ width: "36px", height: "36px" }}
+                />
+                <Typography variant="body1" component={"p"}>
+                  {user.name}
+                </Typography>
+              </Button>
+            ))}
         </Box>
       </Box>
     </Modal>
