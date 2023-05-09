@@ -1,4 +1,4 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Avatar, Box, useMediaQuery } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import Loading from "./Loading";
 import { myMessage } from "../utils/ChatLogics";
@@ -7,6 +7,7 @@ import ChatInput from "./ChatInput/ChatInput";
 import Lottie from "lottie-react";
 import typingAnimation from "../animations/typing.json";
 import { useSelector } from "react-redux";
+import { getSender } from "../utils/ChatLogics";
 
 const Conversation = ({
   loading,
@@ -18,8 +19,10 @@ const Conversation = ({
 }) => {
   const bottomRef = useRef(null);
   const { user } = useSelector((state) => state.auth);
+  const { currentChat } = useSelector((state) => state.currentChat);
 
   const matches = useMediaQuery("(max-width:768px)");
+  const sender = getSender(user, currentChat.users);
 
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
@@ -69,16 +72,18 @@ const Conversation = ({
             })}
 
           {isTyping && (
-            <div
-              style={{
-                width: "100px",
-                position: "absolute",
-                left: "-30px",
-                bottom: "-50px",
-              }}
-            >
-              <Lottie animationData={typingAnimation} loop={true} />
-            </div>
+            <>
+              <Box display={"flex"} alignItems={"center"} maxHeight={"2.5rem"}>
+                {currentChat.isGroupChat ? (
+                  <>
+                    <Avatar>{currentChat.chatName} </Avatar>
+                  </>
+                ) : (
+                  <Avatar alt={sender.name} src={sender?.avatar?.url} />
+                )}
+                <Lottie animationData={typingAnimation} loop={true} />
+              </Box>
+            </>
           )}
           <div ref={bottomRef} />
         </Box>
