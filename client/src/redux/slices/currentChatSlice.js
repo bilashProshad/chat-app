@@ -14,9 +14,13 @@ const currentChatSlice = createSlice({
     resetCurrentChat: (state) => {
       state.currentChat = {};
     },
+    addNewUser: (state, action) => {
+      state.currentChat.users.push(action.payload);
+    },
   },
 });
 
-export const { setCurrentChat, resetCurrentChat } = currentChatSlice.actions;
+export const { setCurrentChat, resetCurrentChat, addNewUser } =
+  currentChatSlice.actions;
 
 export const currentChatReducer = currentChatSlice.reducer;

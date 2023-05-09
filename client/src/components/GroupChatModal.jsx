@@ -51,7 +51,13 @@ const GroupChatModal = ({ openModal, setOpenModal }) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    if (!chatName || selectedUsers.length < 0) {
+    if (!chatName) {
+      toast.error("Please enter chat name");
+      return;
+    }
+
+    if (selectedUsers.length < 2) {
+      toast.error("Select at least 2 user");
       return;
     }
 

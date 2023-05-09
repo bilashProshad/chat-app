@@ -17,10 +17,12 @@ import {
   clearError,
   clearMessage,
 } from "../redux/slices/authSlice";
+import UserProfile from "./UserProfile";
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [openProfileModal, setOpenProfileModal] = React.useState(false);
 
   const { user, error, message, success } = useSelector((state) => state.auth);
 
@@ -30,6 +32,8 @@ export default function ProfileMenu() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleOpenProfile = () => setOpenProfileModal(true);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -59,6 +63,13 @@ export default function ProfileMenu() {
 
   return (
     <React.Fragment>
+      <UserProfile
+        open={openProfileModal}
+        setOpen={setOpenProfileModal}
+        name={user.name}
+        email={user.email}
+        avatar={user?.avatar}
+      />
       <Box
         sx={{
           display: "flex",
@@ -117,7 +128,7 @@ export default function ProfileMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose} sx={{ width: "150px" }}>
+        <MenuItem onClick={handleOpenProfile} sx={{ width: "150px" }}>
           <Avatar src={user?.avatar?.url} alt={user?.name} /> Profile
         </MenuItem>
         <Divider />

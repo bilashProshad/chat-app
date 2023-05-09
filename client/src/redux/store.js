@@ -9,6 +9,7 @@ import { searchUserReducer } from "./slices/searchUserSlice";
 import { addToChatReducer } from "./slices/addToChatSlice";
 import { notificationReducer } from "./slices/notificationSlice";
 import { addGroupChatReducer } from "./slices/AddGroupChatSlice";
+import { updateGroupReducer } from "./slices/updateGroupSlice";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     addToChat: addToChatReducer,
     addGroupChat: addGroupChatReducer,
     notification: notificationReducer,
+    updateGroup: updateGroupReducer,
   },
 });
 

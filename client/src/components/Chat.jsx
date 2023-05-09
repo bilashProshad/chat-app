@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { getSender } from "../utils/ChatLogics";
 import { useDispatch } from "react-redux";
@@ -36,11 +36,12 @@ const Chat = ({ chat }) => {
     >
       <Box display={"flex"} alignItems={"center"} gap={1}>
         {chat.isGroupChat ? (
-          <AvatarGroup max={3} spacing={30}>
-            {chat.users.map((user) => (
-              <Avatar key={user._id} alt={user?.name} src={user?.avatar?.url} />
-            ))}
-          </AvatarGroup>
+          // <AvatarGroup max={2} spacing={30}>
+          //   {chat.users.map((user) => (
+          //     <Avatar key={user._id} alt={user?.name} src={user?.avatar?.url} />
+          //   ))}
+          // </AvatarGroup>
+          <Avatar>{chat.chatName[0]}</Avatar>
         ) : (
           <Avatar alt={sender.name} src={sender?.avatar?.url} />
         )}
