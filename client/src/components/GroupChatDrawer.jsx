@@ -1,7 +1,13 @@
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { Avatar, Button, TextField } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Drawer,
+  TextField,
+  Typography,
+} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { searchUser } from "../redux/actions/searchUserAction";
@@ -12,22 +18,8 @@ import { clearAddToChatError } from "../redux/slices/addToChatSlice";
 import { updateChat } from "../redux/slices/chatsSlice";
 import { setCurrentChat } from "../redux/slices/currentChatSlice";
 import { resetAddGroupChat } from "../redux/slices/AddGroupChatSlice";
-import CloseIcon from "@mui/icons-material/Close";
-import CircularProgress from "@mui/material/CircularProgress";
 
-const style = {
-  position: "absolute",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
-};
-
-const GroupChatModal = ({ openModal, setOpenModal }) => {
+const GroupChatDrawer = ({ state, onClose, setState }) => {
   const [chatName, setChatName] = useState("");
   const [search, setSearch] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -39,10 +31,6 @@ const GroupChatModal = ({ openModal, setOpenModal }) => {
   } = useSelector((state) => state.addGroupChat);
 
   const dispatch = useDispatch();
-
-  const handleClose = () => {
-    setOpenModal(false);
-  };
 
   const removeselectedUsers = (user) => {
     setSelectedUsers(selectedUsers.filter((u) => u._id !== user._id));
@@ -94,18 +82,13 @@ const GroupChatModal = ({ openModal, setOpenModal }) => {
       dispatch(updateChat(newChat));
       dispatch(setCurrentChat(newChat));
       dispatch(resetAddGroupChat());
-      setOpenModal(false);
+      setState({ ...state, top: false });
     }
-  }, [dispatch, newChat, newChatError, setOpenModal]);
+  }, [dispatch, newChat, newChatError, setState, state]);
 
   return (
-    <Modal
-      open={openModal}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
+    <Drawer anchor={"top"} open={state["top"]} onClose={onClose}>
+      <Box p={2}>
         <Box>
           <Typography
             id="modal-modal-title"
@@ -221,8 +204,8 @@ const GroupChatModal = ({ openModal, setOpenModal }) => {
             ))}
         </Box>
       </Box>
-    </Modal>
+    </Drawer>
   );
 };
 
-export default GroupChatModal;
+export default GroupChatDrawer;

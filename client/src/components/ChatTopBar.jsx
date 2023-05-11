@@ -15,8 +15,24 @@ import { resetCurrentChat } from "../redux/slices/currentChatSlice";
 import UserProfile from "./UserProfile";
 import { useState } from "react";
 import GroupChatInfo from "./GroupChatInfo";
+import GroupChatInfoDrawer from "./GroupChatInfoDrawer";
+import UserProfileDrawer from "./UserProfileDrawer";
 
 const ChatTopBar = ({ currentChat }) => {
+  const [state, setState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const [profileState, setProfileState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
   const [openProfileModal, setOpenProfileModal] = useState(false);
   const [openGroupModal, setOpenGroupModal] = useState(false);
 
@@ -28,6 +44,28 @@ const ChatTopBar = ({ currentChat }) => {
   const matches = useMediaQuery("(max-width:768px)");
   const dispatch = useDispatch();
 
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const toggleDrawerProfile = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setProfileState({ ...profileState, [anchor]: open });
+  };
+
   const sender = getSender(user, currentChat.users);
 
   const backButtonHandler = () => {
@@ -36,7 +74,7 @@ const ChatTopBar = ({ currentChat }) => {
 
   return (
     <>
-      {currentChat.isGroupChat ? (
+      {!matches && currentChat.isGroupChat ? (
         <>
           <GroupChatInfo
             openModal={openGroupModal}
@@ -52,6 +90,30 @@ const ChatTopBar = ({ currentChat }) => {
           avatar={sender?.avatar}
         />
       )}
+
+      {matches && currentChat.isGroupChat && (
+        <>
+          <GroupChatInfoDrawer
+            setState={setState}
+            state={state}
+            onClose={toggleDrawer("top", false)}
+          />
+        </>
+      )}
+
+      {matches && !currentChat.isGroupChat && (
+        <>
+          <UserProfileDrawer
+            state={profileState}
+            setState={setProfileState}
+            onClose={toggleDrawerProfile("top", false)}
+            name={sender?.name}
+            email={sender?.email}
+            avatar={sender?.avatar}
+          />
+        </>
+      )}
+
       <Box
         padding={2}
         // sx={{ borderBottom: "1px solid #eee" }}
@@ -89,16 +151,33 @@ const ChatTopBar = ({ currentChat }) => {
           </Typography>
         </Box>
         <Box>
-          <IconButton
-            aria-label="info"
-            onClick={
-              currentChat.isGroupChat
-                ? handleOpenGroupModal
-                : handleOpenSenderProfile
-            }
-          >
-            <InfoIcon fontSize="medium" color="primary" />
-          </IconButton>
+          {matches ? (
+            <>
+              <IconButton
+                aria-label="info"
+                onClick={
+                  currentChat.isGroupChat
+                    ? toggleDrawer("top", true)
+                    : toggleDrawerProfile("top", true)
+                }
+              >
+                <InfoIcon fontSize="medium" color="primary" />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <IconButton
+                aria-label="info"
+                onClick={
+                  currentChat.isGroupChat
+                    ? handleOpenGroupModal
+                    : handleOpenSenderProfile
+                }
+              >
+                <InfoIcon fontSize="medium" color="primary" />
+              </IconButton>
+            </>
+          )}
         </Box>
       </Box>
     </>

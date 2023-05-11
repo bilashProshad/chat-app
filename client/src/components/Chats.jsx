@@ -5,14 +5,33 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import GroupChatModal from "./GroupChatModal";
+import GroupChatDrawer from "./GroupChatDrawer";
 
 const Chats = ({ chats = [], loading = false }) => {
+  const [state, setState] = useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
   const matches = useMediaQuery("(max-width:768px)");
   const [openModal, setOpenModal] = useState(false);
 
-  const handleOpen = () => {
-    setOpenModal(true);
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
   };
+
+  // const handleOpen = () => {
+  //   !matches ? toggleDrawer("top", true) : setOpenModal(true);
+  // };
 
   return (
     <>
@@ -51,7 +70,9 @@ const Chats = ({ chats = [], loading = false }) => {
             Group Chat
           </Typography>
           <Button
-            onClick={handleOpen}
+            onClick={
+              matches ? toggleDrawer("top", true) : () => setOpenModal(true)
+            }
             sx={{
               display: "flex",
               alignItems: "center",
@@ -69,7 +90,16 @@ const Chats = ({ chats = [], loading = false }) => {
           chats.map((chat) => <Chat key={chat._id} chat={chat} />)}
       </Box>
 
-      <GroupChatModal openModal={openModal} setOpenModal={setOpenModal} />
+      {!matches && (
+        <GroupChatModal openModal={openModal} setOpenModal={setOpenModal} />
+      )}
+      {matches && (
+        <GroupChatDrawer
+          setState={setState}
+          state={state}
+          onClose={toggleDrawer("top", false)}
+        />
+      )}
     </>
   );
 };
