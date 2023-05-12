@@ -4,6 +4,7 @@ import {
   CardContent,
   InputLabel,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import Card from "@mui/material/Card";
 import photo1 from "../../assets/photo1.svg";
@@ -22,6 +23,8 @@ const StepAvatar = () => {
   const [imagePreview, setImagePreview] = useState(profile);
   const { name } = useSelector((state) => state.userInfo);
   const { loading, success, error } = useSelector((state) => state.auth);
+
+  const matches = useMediaQuery("(max-width:768px)");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -67,15 +70,17 @@ const StepAvatar = () => {
       {loading ? (
         <Loading />
       ) : (
-        <Card>
+        <Card sx={{ borderRadius: !matches ? "5px" : "0" }}>
           <CardContent
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-around",
+              flexDirection: !matches ? "row" : "column",
+              justifyContent: !matches ? "space-around" : "initial",
               gap: 5,
-              p: 5,
-              height: "30rem",
+              p: !matches ? 5 : 1,
+              height: !matches ? "30rem" : "100svh",
+              paddingTop: matches ? "10vh" : 5,
             }}
           >
             <Box
@@ -87,7 +92,7 @@ const StepAvatar = () => {
             >
               <img src={photo1} alt="photo1" style={{ width: "100%" }} />
             </Box>
-            <Box width={"28rem"}>
+            <Box width={!matches ? "28rem" : "100%"}>
               <Box sx={{ mb: 4 }}>
                 <Typography
                   variant="h5"

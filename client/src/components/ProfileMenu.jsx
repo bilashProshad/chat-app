@@ -18,13 +18,23 @@ import {
   clearMessage,
 } from "../redux/slices/authSlice";
 import UserProfile from "./UserProfile";
+import { useMediaQuery } from "@mui/material";
+import UserProfileDrawer from "./UserProfileDrawer";
 
 export default function ProfileMenu() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const [openProfileModal, setOpenProfileModal] = React.useState(false);
+  const [profileState, setProfileState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
 
   const { user, error, message, success } = useSelector((state) => state.auth);
+
+  const matches = useMediaQuery("(max-width:768px)");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -32,8 +42,6 @@ export default function ProfileMenu() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleOpenProfile = () => setOpenProfileModal(true);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -44,9 +52,20 @@ export default function ProfileMenu() {
     setAnchorEl(null);
   };
 
+  const toggleDrawerProfile = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setProfileState({ ...profileState, [anchor]: open });
+  };
+
   React.useEffect(() => {
     if (message) {
-      toast.success(message);
+      // toast.success(message);
       dispatch(clearMessage());
     }
 
@@ -63,13 +82,28 @@ export default function ProfileMenu() {
 
   return (
     <React.Fragment>
-      <UserProfile
-        open={openProfileModal}
-        setOpen={setOpenProfileModal}
-        name={user.name}
-        email={user.email}
-        avatar={user?.avatar}
-      />
+      {matches ? (
+        <>
+          <UserProfileDrawer
+            state={profileState}
+            setState={setProfileState}
+            onClose={toggleDrawerProfile("top", false)}
+            name={user?.name}
+            email={user?.email}
+            avatar={user?.avatar}
+          />
+        </>
+      ) : (
+        <>
+          <UserProfile
+            open={openProfileModal}
+            setOpen={setOpenProfileModal}
+            name={user.name}
+            email={user.email}
+            avatar={user?.avatar}
+          />
+        </>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -128,7 +162,14 @@ export default function ProfileMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleOpenProfile} sx={{ width: "150px" }}>
+        <MenuItem
+          onClick={
+            matches
+              ? toggleDrawerProfile("top", true)
+              : () => setOpenProfileModal(true)
+          }
+          sx={{ width: "150px" }}
+        >
           <Avatar src={user?.avatar?.url} alt={user?.name} /> Profile
         </MenuItem>
         <Divider />

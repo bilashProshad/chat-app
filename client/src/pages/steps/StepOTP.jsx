@@ -1,4 +1,11 @@
-import { Box, Button, CardContent, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CardContent,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import photo2 from "../../assets/photo2.svg";
 import { useEffect, useState } from "react";
@@ -19,6 +26,8 @@ const StepOTP = ({ onPrev }) => {
     error,
     success,
   } = useSelector((state) => state.auth);
+
+  const matches = useMediaQuery("(max-width:768px)");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -51,15 +60,17 @@ const StepOTP = ({ onPrev }) => {
       {loading ? (
         <Loading />
       ) : (
-        <Card>
+        <Card sx={{ borderRadius: !matches ? "5px" : "0" }}>
           <CardContent
             sx={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-around",
+              flexDirection: !matches ? "row" : "column",
+              justifyContent: !matches ? "space-around" : "initial",
               gap: 5,
-              p: 5,
-              height: "30rem",
+              p: !matches ? 5 : 1,
+              height: !matches ? "30rem" : "100svh",
+              paddingTop: matches ? "10vh" : 5,
             }}
           >
             <Box
@@ -71,7 +82,7 @@ const StepOTP = ({ onPrev }) => {
             >
               <img src={photo2} alt="photo2" style={{ width: "100%" }} />
             </Box>
-            <Box width={"28rem"}>
+            <Box width={!matches ? "28rem" : "100%"}>
               <Box sx={{ mb: 4 }}>
                 <Typography
                   variant="h5"

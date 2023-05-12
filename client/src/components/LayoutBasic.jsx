@@ -1,16 +1,21 @@
-import { Container } from "@mui/material";
+import { Container, useMediaQuery } from "@mui/material";
 import NavBasic from "./NavBasic";
 
 const LayoutBasic = ({ children }) => {
+  const matches = useMediaQuery("(max-width:768px)");
+
   return (
     <>
-      <NavBasic />
+      {!matches && <NavBasic />}
       <Container
+        component={"div"}
         sx={{
           // height: "calc(100svh - 5rem)",
-          mt: 7,
+          mt: !matches ? 7 : 0,
         }}
-        maxWidth="md"
+        maxWidth={matches ? false : "md"}
+        disableGutters={matches}
+        // maxWidth="md"
       >
         {children}
       </Container>
