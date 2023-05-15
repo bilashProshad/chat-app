@@ -59,8 +59,12 @@ const GroupChatInfo = ({ openModal, setOpenModal }) => {
   };
 
   const addUserToGroupHandler = (user) => {
-    setSelectedUser(user);
-    dispatch(addGroupUser({ chatId: currentChat._id, userId: user._id }));
+    const added = groupUsers.findIndex((u) => u._id === user._id);
+
+    if (added === -1) {
+      setSelectedUser(user);
+      dispatch(addGroupUser({ chatId: currentChat._id, userId: user._id }));
+    }
   };
 
   const submitHandler = (e) => {

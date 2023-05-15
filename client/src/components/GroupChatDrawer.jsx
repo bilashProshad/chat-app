@@ -36,6 +36,14 @@ const GroupChatDrawer = ({ state, onClose, setState }) => {
     setSelectedUsers(selectedUsers.filter((u) => u._id !== user._id));
   };
 
+  const addUserToGroup = (user) => {
+    const added = selectedUsers.findIndex((u) => u._id === user._id);
+
+    if (added === -1) {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+  };
+
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -190,7 +198,7 @@ const GroupChatDrawer = ({ state, onClose, setState }) => {
                   backgroundColor: "#eee",
                 }}
                 key={user._id}
-                onClick={() => setSelectedUsers([...selectedUsers, user])}
+                onClick={() => addUserToGroup(user)}
               >
                 <Avatar
                   alt={user.name}
