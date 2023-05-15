@@ -107,7 +107,7 @@ const Navbar = () => {
                 sx={{ position: "relative" }}
                 onClick={toggleDrawer(!matches ? "top" : "right", true)}
               >
-                <Badge badgeContent={1} color="error">
+                <Badge badgeContent={notification.length} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>

@@ -46,10 +46,28 @@ const Chat = ({ chat }) => {
           <Avatar alt={sender.name} src={sender?.avatar?.url} />
         )}
         <Box color={currentChat._id === chat._id ? "#fff" : ""}>
-          <Typography variant="h6" fontSize={16} fontWeight={"bold"}>
+          <Typography
+            variant="h6"
+            fontSize={16}
+            fontWeight={"bold"}
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 1,
+            }}
+          >
             {chat.isGroupChat ? chat.chatName : sender?.name}
           </Typography>
-          <Typography variant="caption">
+          <Typography
+            variant="caption"
+            sx={{
+              display: "-webkit-box",
+              overflow: "hidden",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 1,
+            }}
+          >
             {chat?.lastestMessage?.text}
           </Typography>
         </Box>

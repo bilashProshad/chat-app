@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 
-const Message = ({ message, self = false }) => {
+const Message = ({ message, self = false, isSameSender, isLastMessage }) => {
   return (
     <>
       {self ? (
@@ -21,11 +21,17 @@ const Message = ({ message, self = false }) => {
           >
             {message.text}
           </Typography>
-          <Avatar alt={message.sender.name} src={message.sender?.avatar?.url} />
+          {/* <Avatar alt={message.sender.name} src={message.sender?.avatar?.url} /> */}
         </Box>
       ) : (
         <Box display={"flex"} alignItems={"center"} gap={1}>
-          <Avatar alt={message.sender.name} src={message.sender?.avatar?.url} />
+          {(isSameSender || isLastMessage) && (
+            <Avatar
+              alt={message.sender.name}
+              src={message.sender?.avatar?.url}
+            />
+          )}
+
           <Typography
             sx={{ backgroundColor: "#e4e6eb", color: "#333" }}
             padding={1}
@@ -33,6 +39,7 @@ const Message = ({ message, self = false }) => {
             paddingRight={2}
             // minWidth={"10rem"}
             borderRadius={"0 10px 10px 10px"}
+            ml={!isSameSender && !isLastMessage ? 5.9 : 0}
           >
             {message.text}
           </Typography>

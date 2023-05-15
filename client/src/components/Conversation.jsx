@@ -1,7 +1,7 @@
 import { Avatar, Box, useMediaQuery } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import Loading from "./Loading";
-import { myMessage } from "../utils/ChatLogics";
+import { isLastMessage, isSameSender, myMessage } from "../utils/ChatLogics";
 import Message from "./Message";
 import ChatInput from "./ChatInput/ChatInput";
 import Lottie from "lottie-react";
@@ -59,14 +59,23 @@ const Conversation = ({
           {loading && <Loading />}
           {!loading &&
             conversation.length > 0 &&
-            conversation.map((message) => {
+            conversation.map((message, i) => {
               const isMyMessage = myMessage(user._id, message.sender._id);
+              const sameSender = isSameSender(
+                conversation,
+                message,
+                i,
+                user._id
+              );
+              const lastMessage = isLastMessage(conversation, i, user._id);
 
               return (
                 <Message
                   key={message._id}
                   message={message}
                   self={isMyMessage}
+                  isSameSender={sameSender}
+                  isLastMessage={lastMessage}
                 />
               );
             })}
