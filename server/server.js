@@ -57,7 +57,7 @@ app.use(errorMiddleware);
 const io = new Server(server, {
   pingTimeout: 60000,
   cors: {
-    origin: process.env.FRONT_END_URL,
+    origin: "*",
   },
 });
 
