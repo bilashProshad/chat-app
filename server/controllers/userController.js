@@ -20,13 +20,13 @@ export const sendOtp = catchAsyncErrors(async (req, res, next) => {
   const data = `${email}#${otp}#${expires}`;
   const hash = hashOtp(data);
 
-  // await sendEmail({
-  //   email,
-  //   subject: "Chat App OTP",
-  //   message: `Your chat-app OTP is ${otp}`,
-  // });
+  await sendEmail({
+    email,
+    subject: "Chat App OTP",
+    message: `Your chat-app OTP is ${otp}`,
+  });
 
-  res.status(200).json({ hash: `${hash}.${expires}`, email, otp });
+  res.status(200).json({ hash: `${hash}.${expires}`, email });
 });
 
 export const verifyOtp = catchAsyncErrors(async (req, res, next) => {
