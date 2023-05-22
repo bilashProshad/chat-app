@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { getSender } from "../utils/ChatLogics";
 import { useDispatch } from "react-redux";
 import { setCurrentChat } from "../redux/slices/currentChatSlice";
+import ReactTimeAgo from "react-time-ago";
 
 const Chat = ({ chat }) => {
   const { user } = useSelector((state) => state.auth);
@@ -76,7 +77,11 @@ const Chat = ({ chat }) => {
         fontSize={12}
         color={currentChat._id === chat._id ? "#fff" : ""}
       >
-        1h
+        <ReactTimeAgo
+          date={chat.updatedAt}
+          locale="en-US"
+          timeStyle="twitter"
+        />
       </Typography>
     </Box>
   );

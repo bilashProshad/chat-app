@@ -14,7 +14,7 @@ const Activate = () => {
 
   const nextHandler = () => {
     if (step < 2) {
-      setStep((prevStep) => prevStep + 1);
+      setStep((prev) => prev + 1);
     }
   };
 

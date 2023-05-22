@@ -136,6 +136,7 @@ const ChatTopBar = ({ currentChat }) => {
                   key={user._id}
                   alt={user?.name}
                   src={user?.avatar?.url}
+                  sx={{ width: "32px", height: "32px" }}
                 />
               ))}
             </AvatarGroup>

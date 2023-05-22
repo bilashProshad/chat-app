@@ -14,7 +14,6 @@ import {
   fetchConversation,
   sendMessage,
 } from "../../redux/actions/messageAction";
-import { setNotification } from "../../redux/slices/notificationSlice";
 import {
   clearConversationError,
   updateConversation,
@@ -72,12 +71,15 @@ const Messenger = () => {
     socket.current
       .off("message received")
       .on("message received", (newMessageReceived) => {
-        if (!currentChat || currentChat._id !== newMessageReceived.chat._id) {
+        if (
+          !selectedChatCompare ||
+          selectedChatCompare._id !== newMessageReceived.chat._id
+        ) {
           // give notification
 
-          if (!notification.find((n) => n._id === newMessageReceived._id)) {
+          if (!notification.includes(newMessageReceived)) {
             dispatch(fetchChats());
-            dispatch(setNotification(newMessageReceived));
+            // dispatch(setNotification(newMessageReceived));
           }
         } else {
           dispatch(updateConversation(newMessageReceived));
