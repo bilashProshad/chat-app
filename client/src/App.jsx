@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/Route/ProtectedRoute";
 import store from "./redux/store";
 import { useEffect } from "react";
 import { loadUser } from "./redux/actions/authAction";
+import NotFound from "./pages/NotFound";
 
 function App() {
   useEffect(() => {
@@ -29,6 +30,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/messages" element={<Messenger />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       <Toaster position="bottom-center" />
